@@ -49,3 +49,15 @@ export const createUser = async (req, res) => {
     });
   }
 };
+
+// get users
+
+export const getUsers = async (req, res) => {
+  const id = req.params.id;
+  const user = await User.findById(id, "-password");
+  if (!user) {
+    return res.status(440).json({ msg: "user not found" });
+  }
+
+  return res.status(200).json({ user });
+};

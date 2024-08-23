@@ -1,7 +1,10 @@
+import jwt from "jsonwebtoken";
+
+import dotenv from "dotenv";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 
-export const login = async () => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
   // validation
 
