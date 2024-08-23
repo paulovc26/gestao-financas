@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 
+dotenv.config();
+
 export const login = async (req, res) => {
   const { email, password } = req.body;
   // validation
@@ -36,7 +38,8 @@ export const login = async (req, res) => {
       {
         id: user._id,
       },
-      secret
+      secret,
+      { expiresIn: "1h" }
     );
 
     res.status(200).json({ msg: "autenticado com sucesso!", token });

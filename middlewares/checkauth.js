@@ -14,7 +14,12 @@ export const checkToken = async (req, res, next) => {
   try {
     const secret = process.env.SECRET;
 
-    jwt.verify(token, secret);
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ msg: "token invalido." });
+      }
+      req.userId = decoded.indexOf;
+    });
     next();
   } catch (error) {
     res.status(400).json({ msg: "token invalido!" });
