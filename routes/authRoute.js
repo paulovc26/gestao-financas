@@ -1,11 +1,10 @@
-import authRoute from "./authRoute.js";
-
+import { createUser } from "../controllers/UserController.js";
 import express from "express";
 
 const router = express.Router();
 
 //Lista de rotas
 
-router.use(authRoute);
+router.post("/auth/register", createUser);
 
 export default router;
