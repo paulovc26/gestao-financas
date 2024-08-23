@@ -6,4 +6,7 @@ function isAuth(req, res) {
   if (!email) {
     res.status(422).json({ msg: "Email não cadastrado" });
   }
+  if (!password) {
+    res.status(422).json({ msg: "Email não cadastrado" });
+  }
 }
