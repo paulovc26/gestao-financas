@@ -39,3 +39,35 @@ export const getUserFinances = async (req, res) => {
     });
   }
 };
+
+export const getUserTotalFinances = async (req, res) => {
+  try {
+    // O userId já é uma string válida
+    const userId = req.userId;
+
+    // Agregação para calcular o total de amount
+    const result = await Finance.aggregate([
+      {
+        $match: { user: userId }, // Filtra os documentos pelo userId
+      },
+      {
+        $group: {
+          _id: null, // Não estamos agrupando por nenhum campo específico
+          totalAmount: { $sum: "$amount" }, // Soma todos os valores do campo 'amount'
+        },
+      },
+    ]);
+
+    // Verifica se o resultado contém valores
+    if (result.length > 0) {
+      res.status(200).json({ totalAmount: result[0].totalAmount });
+    } else {
+      res.status(200).json({ totalAmount: 0 }); // Nenhum gasto encontrado
+    }
+  } catch (error) {
+    console.error("Erro ao calcular o total de gastos:", error);
+    res.status(500).json({
+      msg: "Erro interno do servidor",
+    });
+  }
+};

@@ -3,6 +3,9 @@ import dbConnection from "./connection/db.js";
 import cors from "cors";
 import { createUser } from "./controllers/UserController.js";
 import routes from "./routes/index.js";
+import { checkToken } from "./middlewares/checkauth.js";
+import Finance from "./models/Finances.js";
+import mongoose from "mongoose";
 
 dbConnection();
 
