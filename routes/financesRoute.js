@@ -8,6 +8,6 @@ import { checkToken } from "../middlewares/checkauth.js";
 const router = express.Router();
 
 router.post("/finance", checkToken, createFinanceEntry);
-router.get("/finance", checkToken, getUserFinances);
+router.get("/finance", checkToken, getUserFinances, getTotalFinances);
 
 export default router;
