@@ -1,25 +1,25 @@
 // import mongoose from "mongoose";
 // import User from "../models/User.js";
-import Finance from "../models/Finances.js";
+import Income from "../models/Incomes.js";
 
-export const createFinanceEntry = async (req, res) => {
-  const { amount, description } = req.body;
+export const createIncomeEntry = async (req, res) => {
+  const { amount, source } = req.body;
 
-  if (!amount || !description) {
+  if (!amount || !source) {
     return res.status(422).json({
       msg: "Nenhum campo pode ser vazio.",
     });
   }
 
   try {
-    const financeEntry = new Finance({
+    const IncomeEntry = new Income({
       amount,
-      description,
+      source,
       user: req.userId, // pega o id la do token
     });
 
-    await financeEntry.save();
-    res.status(201).json(financeEntry);
+    await IncomeEntry.save();
+    res.status(201).json(IncomeEntry);
   } catch (error) {
     console.error("Erro fatal", error);
     res.status(500).json({
@@ -28,14 +28,14 @@ export const createFinanceEntry = async (req, res) => {
   }
 };
 
-export const updateFinanceEntry = async (req, res) => {
+export const updateIncomeEntry = async (req, res) => {
   const { id } = req.params; // Obtém 'id' da rota
   const _id = id; // Usa '_id' para a consulta no MongoDB
-  const { amount, description } = req.body;
+  const { amount, source } = req.body;
 
   try {
-    const financeEntry = await Finance.findById(_id);
-    if (!financeEntry) {
+    const IncomeEntry = await Income.findById(_id);
+    if (!IncomeEntry) {
       return res.status(404).json({
         msg: "Registro não encontrado.",
       });
@@ -43,15 +43,15 @@ export const updateFinanceEntry = async (req, res) => {
 
     // Atualiza somente os campos fornecidos
     if (amount !== undefined) {
-      financeEntry.amount = amount;
+      IncomeEntry.amount = amount;
     }
-    if (description !== undefined) {
-      financeEntry.description = description;
+    if (source !== undefined) {
+      IncomeEntry.source = source;
     }
 
-    await financeEntry.save();
+    await IncomeEntry.save();
 
-    res.status(200).json(financeEntry); // Retorna o documento atualizado
+    res.status(200).json(IncomeEntry); // Retorna o documento atualizado
   } catch (error) {
     console.error("Erro fatal:", error);
     res.status(500).json({
@@ -60,10 +60,10 @@ export const updateFinanceEntry = async (req, res) => {
   }
 };
 
-export const getUserFinances = async (req, res) => {
+export const getUserIncomes = async (req, res) => {
   try {
-    const finances = await Finance.find({ user: req.userId }).exec();
-    res.status(200).json(finances);
+    const Incomes = await Income.find({ user: req.userId }).exec();
+    res.status(200).json(Incomes);
   } catch (error) {
     console.error("Não foi possível obter as finanças do usuário.", error);
     res.status(500).json({
@@ -72,13 +72,13 @@ export const getUserFinances = async (req, res) => {
   }
 };
 
-export const getUserTotalFinances = async (req, res) => {
+export const getUserTotalIncomes = async (req, res) => {
   try {
     // O userId já é uma string válida
     const userId = req.userId;
 
     // Agregação para calcular o total de amount
-    const result = await Finance.aggregate([
+    const result = await Income.aggregate([
       {
         $match: { user: userId }, // Filtra os documentos pelo userId
       },
@@ -110,8 +110,8 @@ export const deleteEntry = async (req, res) => {
   try {
     console.log("Iniciando delete");
 
-    const financeEntry = await Finance.findByIdAndDelete(id);
-    if (!financeEntry) {
+    const IncomeEntry = await Income.findByIdAndDelete(id);
+    if (!IncomeEntry) {
       // Retorna 404 caso não for encontrado
       return res.status(404).json({
         msg: "Entry not exists",
