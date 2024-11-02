@@ -21,6 +21,6 @@ router.post("/finance", checkToken, createFinanceEntry);
 router.put("/update/:id", checkToken, updateFinanceEntry);
 //
 // delete
-router.delete("/delete/:id", deleteEntry);
+router.delete("/delete/:id", checkToken, deleteEntry);
 
 export default router;
