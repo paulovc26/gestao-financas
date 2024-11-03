@@ -85,17 +85,25 @@ export const getUserTotalIncomes = async (req, res) => {
       {
         $group: {
           _id: null, // Não estamos agrupando por nenhum campo específico
-          totalAmount: { $sum: "$amount" }, // Soma todos os valores do campo 'amount'
+          totalIncome: { $sum: "$amount" }, // Soma todos os valores do campo 'amount'
         },
       },
     ]);
 
+    //MANDAR AO CLIENT
+    //
     // Verifica se o resultado contém valores
-    if (result.length > 0) {
-      res.status(200).json({ totalAmount: result[0].totalAmount });
-    } else {
-      res.status(200).json({ totalAmount: 0 }); // Nenhum gasto encontrado
-    }
+    // if (result.length > 0) {
+    //   res.status(200).json({ totalIncome: result[0].totalIncome });
+    // } else {
+    //   res.status(200).json({ totalIncome: 0 }); // Nenhum gasto encontrado
+    // }
+
+    // MANDAR O TOTAL AO SERVIÇO
+
+    return result.length > 0
+      ? { totalIncome: result[0].totalIncome }
+      : { totalIncome: 0 };
   } catch (error) {
     console.error("Erro ao calcular o total de gastos:", error);
     res.status(500).json({

@@ -89,13 +89,19 @@ export const getUserTotalFinances = async (req, res) => {
         },
       },
     ]);
+    // // MANDAR AO CLIENT
+    // // Verifica se o resultado contém valores
+    // if (result.length > 0) {
+    //   res.status(200).json({ totalAmount: result[0].totalAmount });
+    // } else {
+    //   res.status(200).json({ totalAmount: 0 }); // Nenhum gasto encontrado
+    // }
 
-    // Verifica se o resultado contém valores
-    if (result.length > 0) {
-      res.status(200).json({ totalAmount: result[0].totalAmount });
-    } else {
-      res.status(200).json({ totalAmount: 0 }); // Nenhum gasto encontrado
-    }
+    // MANDAR AO SERVICE
+
+    return result.length > 0
+      ? { totalAmount: result[0].totalAmount }
+      : { totalAmount: 0 };
   } catch (error) {
     console.error("Erro ao calcular o total de gastos:", error);
     res.status(500).json({
